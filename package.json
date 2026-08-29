@@ -1,0 +1,9 @@
+{
+  "name": "tejidos-nicogurumi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tienda online Tejidos Nicogurumi con pago integrado vía Mercado Pago",
+  "dependencies": {
+    "mercadopago": "^2.0.15"
+  }
+}
