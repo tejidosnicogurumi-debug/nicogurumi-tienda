@@ -170,7 +170,7 @@
   .card:hover{transform:translateY(-6px); box-shadow:0 16px 30px rgba(61,31,61,.1);}
   .card-media{
     height:190px; display:flex; align-items:center; justify-content:center;
-    position:relative;
+    position:relative; overflow:hidden;
   }
   .card-media svg{width:104px; height:104px;}
   .card-tag{
@@ -290,7 +290,7 @@
   .empty-cart svg{width:64px; height:64px; margin:0 auto 14px; color:var(--line);}
   .cart-item{display:flex; gap:14px; align-items:center;}
   .cart-item .ci-media{
-    width:64px; height:64px; border-radius:14px; flex-shrink:0;
+    width:64px; height:64px; border-radius:14px; flex-shrink:0; overflow:hidden;
     display:flex; align-items:center; justify-content:center;
   }
   .cart-item .ci-media svg{width:38px; height:38px;}
@@ -830,12 +830,32 @@
 
 <script>
   // ---------- Data ----------
+  // Íconos de categoría (se usan solo si un producto no tiene ilustración propia)
   const ICONS = {
     amigurumi: `<svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="58" r="34" fill="#F5A623"/><circle cx="34" cy="30" r="12" fill="#F5A623"/><circle cx="66" cy="30" r="12" fill="#F5A623"/><circle cx="40" cy="55" r="4.5" fill="#3D1F3D"/><circle cx="60" cy="55" r="4.5" fill="#3D1F3D"/><path d="M42 70c5 6 11 6 16 0" stroke="#3D1F3D" stroke-width="3.5" stroke-linecap="round"/></svg>`,
     ropa: `<svg viewBox="0 0 100 100" fill="none"><path d="M35 20 L20 32 L28 42 L35 36 V80 H65 V36 L72 42 L80 32 L65 20 Q50 30 35 20Z" fill="#4FA98A"/></svg>`,
     accesorios: `<svg viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="45" rx="26" ry="26" fill="#A78BFA"/><path d="M50 71 Q40 85 30 82 Q45 90 50 71Z" fill="#A78BFA"/><path d="M50 71 Q60 85 70 82 Q55 90 50 71Z" fill="#A78BFA"/></svg>`
   };
   const BG = {amigurumi:'#FFF1D6', ropa:'#E4F5EC', accesorios:'#F1EAFE'};
+
+  // Ilustración propia por producto (id → SVG). Se usa mientras no haya foto real.
+  const PRODUCT_ICONS = {
+    1: `<svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="58" r="34" fill="#F5A623"/><circle cx="34" cy="30" r="12" fill="#F5A623"/><circle cx="66" cy="30" r="12" fill="#F5A623"/><circle cx="40" cy="55" r="4.5" fill="#3D1F3D"/><circle cx="60" cy="55" r="4.5" fill="#3D1F3D"/><ellipse cx="50" cy="66" rx="8" ry="6" fill="#fff" opacity=".5"/><path d="M42 70c5 6 11 6 16 0" stroke="#3D1F3D" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+    2: `<svg viewBox="0 0 100 100" fill="none"><ellipse cx="33" cy="20" rx="8" ry="20" fill="#F7B6C9"/><ellipse cx="67" cy="20" rx="8" ry="20" fill="#F7B6C9"/><circle cx="50" cy="52" r="28" fill="#FDE1EA"/><path d="M28 76 Q50 96 72 76 L66 58 Q50 68 34 58Z" fill="#E8546B"/><circle cx="40" cy="48" r="4" fill="#3D1F3D"/><circle cx="60" cy="48" r="4" fill="#3D1F3D"/><path d="M46 58q4 4 8 0" stroke="#3D1F3D" stroke-width="3" stroke-linecap="round"/></svg>`,
+    3: `<svg viewBox="0 0 100 100" fill="none"><ellipse cx="45" cy="62" rx="34" ry="26" fill="#4FA98A"/><path d="M65 30 Q72 40 66 46 Q78 40 78 52 Q88 46 84 58" stroke="#4FA98A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M20 60 Q10 66 14 78" stroke="#4FA98A" stroke-width="10" stroke-linecap="round" fill="none"/><circle cx="60" cy="55" r="4" fill="#3D1F3D"/></svg>`,
+    4: `<svg viewBox="0 0 100 100" fill="none"><path d="M35 20 L20 32 L28 42 L35 36 V80 H65 V36 L72 42 L80 32 L65 20 Q50 30 35 20Z" fill="#4FA98A"/></svg>`,
+    5: `<svg viewBox="0 0 100 100" fill="none"><path d="M30 25 L30 15 M70 25 L70 15" stroke="#F5A623" stroke-width="6" stroke-linecap="round"/><path d="M25 30 Q50 15 75 30 L70 75 Q50 82 30 75 Z" fill="#F5A623"/></svg>`,
+    6: `<svg viewBox="0 0 100 100" fill="none"><path d="M50 22 L30 30 L22 45 L30 50 L34 80 H48 V40 H52 V80 H66 L70 50 L78 45 L70 30Z" fill="#A78BFA"/><circle cx="50" cy="45" r="2.5" fill="#fff"/><circle cx="50" cy="58" r="2.5" fill="#fff"/><circle cx="50" cy="71" r="2.5" fill="#fff"/></svg>`,
+    7: `<svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="18" r="10" fill="#fff"/><path d="M25 55 Q25 20 50 20 Q75 20 75 55 Z" fill="#E8546B"/><rect x="20" y="55" width="60" height="16" rx="8" fill="#C63852"/></svg>`,
+    8: `<svg viewBox="0 0 100 100" fill="none"><path d="M10 40 Q30 20 50 40 T90 40" stroke="#F5A623" stroke-width="16" stroke-linecap="round" fill="none"/><path d="M80 40 L80 70" stroke="#F5A623" stroke-width="16" stroke-linecap="round"/><path d="M74 72 L74 82 M80 72 L80 84 M86 72 L86 82" stroke="#C97E10" stroke-width="3" stroke-linecap="round"/></svg>`,
+    9: `<svg viewBox="0 0 100 100" fill="none"><path d="M35 35 Q35 15 50 15 Q65 15 65 35" stroke="#A78BFA" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M22 35 H78 L72 82 H28Z" fill="#A78BFA"/></svg>`,
+  };
+  // Devuelve la foto real si el producto ya tiene una (campo "img"),
+  // si no, su ilustración propia, y si tampoco existe, el ícono genérico de su categoría.
+  function productMedia(p){
+    if(p.img) return `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;">`;
+    return PRODUCT_ICONS[p.id] || ICONS[p.cat];
+  }
 
   const products = [
     {id:1, cat:'amigurumi', name:'Osito Cariñoso', desc:'Amigurumi de 22cm en algodón peruano, ideal para regalo.', price:65},
@@ -862,7 +882,7 @@
       <article class="card">
         <div class="card-media" style="background:${BG[p.cat]}">
           <span class="card-tag">${CAT_LABEL[p.cat]}</span>
-          ${ICONS[p.cat]}
+          ${productMedia(p)}
         </div>
         <div class="card-body">
           <h3>${p.name}</h3>
@@ -933,7 +953,7 @@
       total += p.price * c.qty;
       return `
         <div class="cart-item">
-          <div class="ci-media" style="background:${BG[p.cat]}">${ICONS[p.cat]}</div>
+          <div class="ci-media" style="background:${BG[p.cat]}">${productMedia(p)}</div>
           <div class="ci-info">
             <h4>${p.name}</h4>
             <span class="price">S/ ${p.price}</span>
