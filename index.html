@@ -347,6 +347,18 @@
   .glossary-card h4{font-size:.95rem; margin-bottom:6px;}
   .glossary-card p{font-size:.82rem; color:var(--ink-soft);}
 
+  /* ---------- Patrones gratis ---------- */
+  .patterns-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px; max-width:900px; margin:0 auto;}
+  .pattern-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; display:grid; grid-template-columns:1fr 1.3fr;
+  }
+  .pattern-media{height:100%; min-height:220px;}
+  .pattern-media img{width:100%; height:100%; object-fit:cover; display:block;}
+  .pattern-body{padding:22px 24px; display:flex; flex-direction:column; gap:8px;}
+  .pattern-body h3{font-size:1.15rem;}
+  .pattern-body p{font-size:.88rem; color:var(--ink-soft); flex:1;}
+
   /* ---------- Nosotros ---------- */
   .about-grid{display:grid; grid-template-columns:0.85fr 1.15fr; gap:52px; align-items:center;}
   .about-photo{
@@ -463,6 +475,8 @@
     .footer-grid{grid-template-columns:1fr 1fr; gap:30px;}
     .steps-grid{grid-template-columns:1fr; max-width:440px; margin:0 auto;}
     .glossary-grid{grid-template-columns:repeat(2,1fr);}
+    .pattern-card{grid-template-columns:1fr;}
+    .pattern-media{min-height:200px;}
     .about-grid{grid-template-columns:1fr; text-align:center;}
     .about-photo{max-width:280px; margin:0 auto;}
     .about-quote{text-align:left;}
@@ -603,6 +617,7 @@
       <button class="filter-btn" data-cat="amigurumi">Amigurumis</button>
       <button class="filter-btn" data-cat="ropa">Ropa</button>
       <button class="filter-btn" data-cat="accesorios">Accesorios</button>
+      <button class="filter-btn" data-cat="decoracion">Decoración</button>
     </div>
     <div class="grid" id="productGrid"></div>
   </section>
@@ -632,6 +647,28 @@
     </button>
     <div id="stitchModalContent"></div>
   </div>
+
+  <!-- ============ PATRONES ============ -->
+  <section id="patrones" class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">🧵 Aprende gratis</span>
+      <h2>Patrones para tejer tú misma</h2>
+      <p>Comparto patrones paso a paso con fotos y notas técnicas, para que sigas practicando en casa sin costo.</p>
+    </div>
+    <div class="patterns-grid">
+      <div class="pattern-card">
+        <div class="pattern-media">
+          <img src="images/tulipan-corazon.jpg" alt="Patrón Tulipán con Corazón">
+        </div>
+        <div class="pattern-body">
+          <span class="glossary-level basico">Nivel Básico</span>
+          <h3>Tulipán con Corazón</h3>
+          <p>Un tulipán tejido a crochet con un corazón bicolor en el pétalo, hoja y tallo con soporte. Incluye glosario de abreviaturas, instrucciones vuelta por vuelta y notas técnicas de cambio de color.</p>
+          <a href="patron-tulipan-corazon.pdf" download class="btn btn-primary btn-block">📄 Descargar patrón gratis (PDF)</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <svg class="cadeneta wrap" viewBox="0 0 1180 34" preserveAspectRatio="none">
     <path d="M0 17 Q 15 2, 30 17 T 60 17 T 90 17 T 120 17 T 150 17 T 180 17 T 210 17 T 240 17 T 270 17 T 300 17 T 330 17 T 360 17 T 390 17 T 420 17 T 450 17 T 480 17 T 510 17 T 540 17 T 570 17 T 600 17 T 630 17 T 660 17 T 690 17 T 720 17 T 750 17 T 780 17 T 810 17 T 840 17 T 870 17 T 900 17 T 930 17 T 960 17 T 990 17 T 1020 17 T 1050 17 T 1080 17 T 1110 17 T 1140 17 T 1170 17" stroke="#A78BFA" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>
@@ -844,6 +881,7 @@
           <ul>
             <li><a href="#clases">Clases virtuales</a></li>
             <li><a href="#glosario">Glosario de puntos</a></li>
+            <li><a href="#patrones">Patrones gratis</a></li>
             <li><a href="#comunidad">Comunidad</a></li>
           </ul>
         </div>
@@ -895,9 +933,10 @@
   const ICONS = {
     amigurumi: `<svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="58" r="34" fill="#F5A623"/><circle cx="34" cy="30" r="12" fill="#F5A623"/><circle cx="66" cy="30" r="12" fill="#F5A623"/><circle cx="40" cy="55" r="4.5" fill="#3D1F3D"/><circle cx="60" cy="55" r="4.5" fill="#3D1F3D"/><path d="M42 70c5 6 11 6 16 0" stroke="#3D1F3D" stroke-width="3.5" stroke-linecap="round"/></svg>`,
     ropa: `<svg viewBox="0 0 100 100" fill="none"><path d="M35 20 L20 32 L28 42 L35 36 V80 H65 V36 L72 42 L80 32 L65 20 Q50 30 35 20Z" fill="#4FA98A"/></svg>`,
-    accesorios: `<svg viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="45" rx="26" ry="26" fill="#A78BFA"/><path d="M50 71 Q40 85 30 82 Q45 90 50 71Z" fill="#A78BFA"/><path d="M50 71 Q60 85 70 82 Q55 90 50 71Z" fill="#A78BFA"/></svg>`
+    accesorios: `<svg viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="45" rx="26" ry="26" fill="#A78BFA"/><path d="M50 71 Q40 85 30 82 Q45 90 50 71Z" fill="#A78BFA"/><path d="M50 71 Q60 85 70 82 Q55 90 50 71Z" fill="#A78BFA"/></svg>`,
+    decoracion: `<svg viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="30" rx="16" ry="20" fill="#E8546B"/><path d="M50 50 L50 85" stroke="#4FA98A" stroke-width="6" stroke-linecap="round"/><path d="M50 62 Q68 58 66 44" stroke="#4FA98A" stroke-width="6" stroke-linecap="round" fill="none"/></svg>`
   };
-  const BG = {amigurumi:'#FFF1D6', ropa:'#E4F5EC', accesorios:'#F1EAFE'};
+  const BG = {amigurumi:'#FFF1D6', ropa:'#E4F5EC', accesorios:'#F1EAFE', decoracion:'#FCE4EC'};
 
   // Ilustración propia por producto (id → SVG). Se usa mientras no haya foto real.
   const PRODUCT_ICONS = {
@@ -928,9 +967,10 @@
     {id:7, cat:'accesorios', name:'Gorro Invierno', desc:'Gorro grueso con pompón, varios colores.', price:38},
     {id:8, cat:'accesorios', name:'Bufanda Trenzada', desc:'Bufanda larga de punto trenzado clásico.', price:52},
     {id:9, cat:'accesorios', name:'Bolso Tote Hilo', desc:'Bolso tejido resistente, forrado por dentro.', price:78},
+    {id:10, cat:'decoracion', name:'Tulipán con Corazón', desc:'Tulipán tejido a mano con un corazón bicolor en el pétalo, tallo y hoja incluidos, con soporte interno para que se mantenga en pie.', price:35, img:'images/tulipan-corazon.jpg'},
   ];
 
-  const CAT_LABEL = {amigurumi:'Amigurumi', ropa:'Ropa', accesorios:'Accesorio'};
+  const CAT_LABEL = {amigurumi:'Amigurumi', ropa:'Ropa', accesorios:'Accesorio', decoracion:'Decoración'};
 
   let cart = []; // {id, qty}
   let activeFilter = 'todos';
@@ -1031,7 +1071,7 @@
 
   // ---------- Animaciones al hacer scroll ----------
   const revealTargets = document.querySelectorAll(
-    '.step-card, .card, .glossary-card, .class-card, .testimonial-card, .faq-item, .about-grid, .community'
+    '.step-card, .card, .glossary-card, .pattern-card, .class-card, .testimonial-card, .faq-item, .about-grid, .community'
   );
   revealTargets.forEach(el => el.classList.add('reveal'));
   const revealObserver = new IntersectionObserver((entries) => {
