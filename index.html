@@ -77,6 +77,11 @@
     transition:color .2s;
   }
   .nav-links a:hover{color:var(--coral-dark);}
+  .nav-links a.active{color:var(--coral-dark);}
+  .nav-links a.active::after{
+    content:''; position:absolute; left:0; right:0; bottom:-4px; height:3px;
+    background:var(--coral); border-radius:100px;
+  }
   .nav-actions{display:flex; align-items:center; gap:14px;}
   .cart-btn{
     background:var(--coral); color:#fff;
@@ -393,6 +398,58 @@
   .whatsapp-float:hover{transform:scale(1.08);}
   .whatsapp-float svg{width:28px; height:28px;}
 
+  .glossary-card:hover{border-color:var(--coral); transform:translateY(-4px);}
+  .glossary-card{cursor:pointer;}
+  .glossary-legend{display:flex; gap:22px; justify-content:center; margin-bottom:26px; font-size:.85rem; font-weight:700; color:var(--ink-soft);}
+  .glossary-legend .dot{width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:6px;}
+  .dot-basico{background:var(--mint);}
+  .dot-intermedio{background:var(--mustard);}
+  .glossary-level{
+    display:inline-block; font-size:.66rem; font-weight:800; padding:3px 9px;
+    border-radius:100px; margin-top:8px;
+  }
+  .glossary-level.basico{background:#E4F5EC; color:var(--mint-dark);}
+  .glossary-level.intermedio{background:#FDEBD3; color:#B4700A;}
+
+  /* ---------- Modal de puntos ---------- */
+  .stitch-overlay{
+    position:fixed; inset:0; background:rgba(61,31,61,.4);
+    opacity:0; pointer-events:none; transition:opacity .25s; z-index:110;
+  }
+  .stitch-overlay.open{opacity:1; pointer-events:auto;}
+  .stitch-modal{
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-46%) scale(.96);
+    background:var(--paper); border-radius:24px; padding:34px; max-width:440px; width:88vw;
+    z-index:120; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+    box-shadow:0 24px 60px rgba(61,31,61,.28);
+  }
+  .stitch-modal.open{opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1);}
+  .stitch-modal .close-btn{position:absolute; top:16px; right:16px;}
+  .stitch-modal-abbr{
+    width:60px; height:60px; border-radius:50%; background:var(--bg-soft); color:var(--coral-dark);
+    font-family:'Baloo 2'; font-weight:800; font-size:1.25rem;
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+  }
+  .stitch-modal h3{font-size:1.35rem; margin-bottom:8px;}
+  .stitch-modal-desc{color:var(--ink-soft); font-size:.96rem; margin:14px 0 18px; line-height:1.55;}
+  .stitch-modal-tip{
+    background:var(--bg-soft); border-radius:14px; padding:14px 16px;
+    font-size:.88rem; color:var(--ink-soft); display:flex; gap:10px; align-items:flex-start;
+  }
+  .stitch-modal-tip b{color:var(--ink); flex-shrink:0;}
+
+  /* ---------- Scroll progress + reveal ---------- */
+  .scroll-progress{
+    position:fixed; top:0; left:0; height:3px; width:0%;
+    background:linear-gradient(90deg, var(--coral), var(--mustard));
+    z-index:200; transition:width .1s linear;
+  }
+  .reveal{opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.visible{opacity:1; transform:none;}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+  }
+
   /* ---------- Responsive ---------- */
   @media (max-width:920px){
     .hero{grid-template-columns:1fr; text-align:center; padding-top:44px;}
@@ -435,6 +492,7 @@
 </style>
 </head>
 <body>
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <!-- ============ HEADER ============ -->
 <header>
@@ -558,19 +616,22 @@
     <div class="section-head">
       <span class="eyebrow">📖 Aprende el lenguaje del crochet</span>
       <h2>Glosario de puntos básicos</h2>
-      <p>¿Primera vez por aquí? Estos son los puntos más usados y sus abreviaturas, para que entiendas cualquier patrón.</p>
+      <p>¿Primera vez por aquí? Toca cualquier punto para ver su explicación completa y un tip para practicarlo.</p>
     </div>
-    <div class="glossary-grid">
-      <div class="glossary-card"><div class="glossary-abbr">cad</div><h4>Cadeneta</h4><p>El punto base: una cadena de nudos que da inicio a casi todo tejido.</p></div>
-      <div class="glossary-card"><div class="glossary-abbr">pb</div><h4>Punto bajo</h4><p>El punto más compacto, muy usado en amigurumis por su textura firme.</p></div>
-      <div class="glossary-card"><div class="glossary-abbr">pa</div><h4>Punto alto</h4><p>Más alto y suelto, ideal para prendas y mantas que caen con soltura.</p></div>
-      <div class="glossary-card"><div class="glossary-abbr">pr</div><h4>Punto raso</h4><p>Se usa para unir vueltas o cerrar el tejido de forma disimulada.</p></div>
-      <div class="glossary-card"><div class="glossary-abbr">aum</div><h4>Aumento</h4><p>Tejer 2 puntos en el mismo lugar, para ensanchar la pieza.</p></div>
-      <div class="glossary-card"><div class="glossary-abbr">dism</div><h4>Disminución</h4><p>Unir 2 puntos en uno, para achicar o cerrar la pieza.</p></div>
-      <div class="glossary-card"><div class="glossary-abbr">vta</div><h4>Vuelta</h4><p>Cada anillo completo de puntos tejidos alrededor de la pieza.</p></div>
-      <div class="glossary-card"><div class="glossary-abbr">a.m.</div><h4>Anillo mágico</h4><p>El nudo inicial ajustable con el que casi siempre arranca un amigurumi.</p></div>
+    <div class="glossary-legend">
+      <span><i class="dot dot-basico"></i> Básico</span>
+      <span><i class="dot dot-intermedio"></i> Intermedio</span>
     </div>
+    <div class="glossary-grid" id="glossaryGrid"></div>
   </section>
+
+  <div class="stitch-overlay" id="stitchOverlay"></div>
+  <div class="stitch-modal" id="stitchModal" role="dialog" aria-modal="true">
+    <button class="close-btn" id="stitchClose" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div id="stitchModalContent"></div>
+  </div>
 
   <svg class="cadeneta wrap" viewBox="0 0 1180 34" preserveAspectRatio="none">
     <path d="M0 17 Q 15 2, 30 17 T 60 17 T 90 17 T 120 17 T 150 17 T 180 17 T 210 17 T 240 17 T 270 17 T 300 17 T 330 17 T 360 17 T 390 17 T 420 17 T 450 17 T 480 17 T 510 17 T 540 17 T 570 17 T 600 17 T 630 17 T 660 17 T 690 17 T 720 17 T 750 17 T 780 17 T 810 17 T 840 17 T 870 17 T 900 17 T 930 17 T 960 17 T 990 17 T 1020 17 T 1050 17 T 1080 17 T 1110 17 T 1140 17 T 1170 17" stroke="#A78BFA" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>
@@ -907,6 +968,97 @@
     activeFilter = btn.dataset.cat;
     renderProducts();
   });
+
+  // ---------- Glosario interactivo ----------
+  const STITCHES = [
+    {abbr:'cad', name:'Cadeneta', level:'basico', levelLabel:'Básico', desc:'El punto base de casi todo tejido: una cadena de nudos simples enlazados uno tras otro, sobre la que luego se construyen las demás vueltas.', tip:'Mantén siempre la misma tensión en cada nudo — así tu cadena queda pareja y las filas no se ven torcidas.'},
+    {abbr:'pb', name:'Punto bajo', level:'basico', levelLabel:'Básico', desc:'El punto más compacto y bajo de altura. Se mete la aguja en el punto anterior, se toma hilo y se sacan las dos lazadas juntas.', tip:'Es el favorito para amigurumis porque casi no deja huecos entre puntos, dando una textura firme.'},
+    {abbr:'pa', name:'Punto alto', level:'basico', levelLabel:'Básico', desc:'Más alto y suelto que el punto bajo. Se hace una lazada antes de meter la aguja, lo que da más altura a cada punto tejido.', tip:'Ideal para prendas y mantas: avanza más rápido que el punto bajo por su mayor altura.'},
+    {abbr:'pr', name:'Punto raso', level:'basico', levelLabel:'Básico', desc:'El punto más bajo de todos, casi plano. Se usa para desplazarse sin ganar altura, o para cerrar el tejido de forma disimulada.', tip:'Muy útil para unir el final de una vuelta con el principio, dejando una unión casi invisible.'},
+    {abbr:'aum', name:'Aumento', level:'intermedio', levelLabel:'Intermedio', desc:'Se tejen dos puntos en el mismo lugar del punto anterior, haciendo que la pieza crezca en ancho.', tip:'Los amigurumis suelen empezar con varias vueltas de aumentos para formar su base redonda.'},
+    {abbr:'dism', name:'Disminución', level:'intermedio', levelLabel:'Intermedio', desc:'Se unen dos puntos en uno solo, tejiéndolos juntos, haciendo que la pieza se achique o cierre.', tip:'Se usa mucho al cerrar la cabeza o las extremidades de un amigurumi, o al dar forma a una prenda.'},
+    {abbr:'vta', name:'Vuelta', level:'basico', levelLabel:'Básico', desc:'Cada anillo completo de puntos tejidos alrededor de la pieza, de principio a fin, antes de empezar el siguiente.', tip:'Los patrones casi siempre indican cuántos puntos debe tener cada vuelta — cuéntalos para no perderte.'},
+    {abbr:'a.m.', name:'Anillo mágico', level:'intermedio', levelLabel:'Intermedio', desc:'Un nudo inicial ajustable que se cierra bien apretado al terminar la primera vuelta, dejando el centro de la pieza sin huecos.', tip:'Cuesta un poco de práctica al principio, pero evita el agujerito típico en el centro de los amigurumis.'},
+  ];
+
+  const glossaryGrid = document.getElementById('glossaryGrid');
+  glossaryGrid.innerHTML = STITCHES.map((s, i) => `
+    <div class="glossary-card" data-index="${i}">
+      <div class="glossary-abbr">${s.abbr}</div>
+      <h4>${s.name}</h4>
+      <span class="glossary-level ${s.level}">${s.levelLabel}</span>
+    </div>
+  `).join('');
+
+  const stitchOverlay = document.getElementById('stitchOverlay');
+  const stitchModal = document.getElementById('stitchModal');
+  const stitchModalContent = document.getElementById('stitchModalContent');
+
+  function openStitch(i){
+    const s = STITCHES[i];
+    stitchModalContent.innerHTML = `
+      <div class="stitch-modal-abbr">${s.abbr}</div>
+      <span class="glossary-level ${s.level}">${s.levelLabel}</span>
+      <h3 style="margin-top:8px;">${s.name}</h3>
+      <p class="stitch-modal-desc">${s.desc}</p>
+      <div class="stitch-modal-tip"><b>💡 Tip:</b><span>${s.tip}</span></div>
+    `;
+    stitchOverlay.classList.add('open');
+    stitchModal.classList.add('open');
+  }
+  function closeStitch(){
+    stitchOverlay.classList.remove('open');
+    stitchModal.classList.remove('open');
+  }
+  glossaryGrid.addEventListener('click', (e) => {
+    const card = e.target.closest('.glossary-card');
+    if(!card) return;
+    openStitch(Number(card.dataset.index));
+  });
+  document.getElementById('stitchClose').addEventListener('click', closeStitch);
+  stitchOverlay.addEventListener('click', closeStitch);
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeStitch(); });
+
+  // ---------- Barra de progreso de scroll ----------
+  const scrollProgress = document.getElementById('scrollProgress');
+  function updateScrollProgress(){
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    scrollProgress.style.width = (scrolled || 0) + '%';
+  }
+  window.addEventListener('scroll', updateScrollProgress, {passive:true});
+  updateScrollProgress();
+
+  // ---------- Animaciones al hacer scroll ----------
+  const revealTargets = document.querySelectorAll(
+    '.step-card, .card, .glossary-card, .class-card, .testimonial-card, .faq-item, .about-grid, .community'
+  );
+  revealTargets.forEach(el => el.classList.add('reveal'));
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12});
+  revealTargets.forEach(el => revealObserver.observe(el));
+
+  // ---------- Resaltar sección activa en el menú ----------
+  const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+  const navSections = Array.from(navAnchors).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = '#' + entry.target.id;
+      const link = document.querySelector(`.nav-links a[href="${id}"]`);
+      if(!link) return;
+      if(entry.isIntersecting){
+        navAnchors.forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, {rootMargin:'-45% 0px -45% 0px'});
+  navSections.forEach(sec => sectionObserver.observe(sec));
 
   // ---------- Cart logic ----------
   function addToCart(id){
