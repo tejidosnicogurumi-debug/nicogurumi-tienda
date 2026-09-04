@@ -954,7 +954,7 @@
   // Devuelve la foto real si el producto ya tiene una (campo "img"),
   // si no, su ilustración propia, y si tampoco existe, el ícono genérico de su categoría.
   function productMedia(p){
-    if(p.img) return `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:contain;">`;
+    if(p.img) return `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in;" onclick="openImageModal('${p.img}','${p.name.replace(/'/g,"\\'")}')">`;
     return PRODUCT_ICONS[p.id] || ICONS[p.cat];
   }
 
